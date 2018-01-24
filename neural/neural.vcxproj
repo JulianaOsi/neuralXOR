@@ -115,12 +115,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="doubleList.cpp" />
     <ClCompile Include="learningFunction.cpp" />
     <ClCompile Include="mainNeural.cpp" />
     <ClCompile Include="matrix.cpp" />
     <ClCompile Include="stdafx.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="doubleList.h" />
     <ClInclude Include="learningFunction.h" />
     <ClInclude Include="mainNeural.h" />
     <ClInclude Include="matrix.h" />

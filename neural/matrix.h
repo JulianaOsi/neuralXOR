@@ -1,10 +1,10 @@
 #pragma once
+#include "doubleList.h"
 struct neural {
 	double **weights;
 	int layersNumber = 3;
 	int neuronsNumber = 0;
-	int neuronsPerLayer[3] = { 2,3,1 };
-	//int *neuronsPerLayer = NULL;
+	node* head;
 };
 
 int neuronsCounter(struct neural mtrx);
