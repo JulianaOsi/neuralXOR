@@ -13,7 +13,7 @@ double ** matrixCreation(struct neural mtrx) {
 	layerStart = new int[mtrx.layersNumber];
 	for (int i = 0; i < mtrx.layersNumber; i++) {		//заполняет массив индексами нейронов, 
 		layerStart[i] = neuronsNumber;					//с которых начинаются слои
-		neuronsNumber += mtrx.neuronsPerLayer[i];
+		neuronsNumber += findElement(mtrx.head, i);
 	}
 
 	weights = new double*[neuronsNumber];
@@ -25,8 +25,8 @@ double ** matrixCreation(struct neural mtrx) {
 
 	/*присваивание случайных значений весам*/
 	for (int i = 0; i < mtrx.layersNumber - 1; i++)		//перебор слоёв нейросети
-		for (int k = layerStart[i]; k < layerStart[i] + mtrx.neuronsPerLayer[i]; k++)	//перебор элементов в данном слое
-			for (int j = layerStart[i + 1]; j < layerStart[i + 1] + mtrx.neuronsPerLayer[i + 1]; j++)	//перебор элементов в следующем слое
+		for (int k = layerStart[i]; k < layerStart[i] + findElement(mtrx.head, i); k++)	//перебор элементов в данном слое
+			for (int j = layerStart[i + 1]; j < layerStart[i + 1] + findElement(mtrx.head, i + 1); j++)	//перебор элементов в следующем слое
 				weights[j][k] = (double)rand() / (RAND_MAX + 1) * (1 - 0) + 0; //заполнение веса между нейроном даного слоя и нейроном следующего  
 	delete[]layerStart;
 	return weights;
@@ -47,7 +47,7 @@ void writeToFile(string fileName, struct neural mtrx) {
 int neuronsCounter(struct neural mtrx) {
 	int neuronsNumber = 0;
 	for (int i = 0; i < mtrx.layersNumber; i++) {		//перебор слоёв 
-		neuronsNumber += mtrx.neuronsPerLayer[i];		//складывание нейронов каждого слоя
+		neuronsNumber += findElement(mtrx.head, i);		//складывание нейронов каждого слоя
 	}
 	return neuronsNumber;
 }
@@ -58,10 +58,10 @@ double ** straightPass(struct neural mtrx) {
 	layerStart[0] = 0;
 	/*определение уровней активации нейронов каждого слоя*/
 	for (int i = 1; i < mtrx.layersNumber; i++) {			//перебор слоёв 
-		layerStart[i] = layerStart[i - 1] + mtrx.neuronsPerLayer[i - 1]; //массив индексов первых элементов слоёв
-		for (int k = 0; k < mtrx.neuronsPerLayer[i]; k++) { //перебор элементов в слое
+		layerStart[i] = layerStart[i - 1] + findElement(mtrx.head, i - 1); //массив индексов первых элементов слоёв
+		for (int k = 0; k < findElement(mtrx.head, i); k++) { //перебор элементов в слое
 			mtrx.weights[layerStart[i] + k][layerStart[i] + k] = 0; //обнуление значений нейронов
-			for (int j = 0; j < mtrx.neuronsPerLayer[i - 1]; j++) //перебор элементов предыдущего слоя
+			for (int j = 0; j < findElement(mtrx.head, i - 1); j++) //перебор элементов предыдущего слоя
 																  /*высчитывание значения в данном нейроне*/
 				mtrx.weights[layerStart[i] + k][layerStart[i] + k] += mtrx.weights[layerStart[i - 1] + j][layerStart[i - 1] + j] * mtrx.weights[layerStart[i] + k][layerStart[i - 1] + j];
 			/*пропуск нейрона через активационную функцию*/
@@ -78,10 +78,10 @@ double ** training(struct neural mtrx, double expected) {
 	layerStart[0] = 0;
 	/*определение уровней активации нейронов каждого слоя*/
 	for (int i = 1; i < mtrx.layersNumber; i++) {	//перебор слоёв
-		layerStart[i] = layerStart[i - 1] + mtrx.neuronsPerLayer[i - 1];	//массив индексов первых элементов слоёв
-		for (int k = 0; k < mtrx.neuronsPerLayer[i]; k++) {		//перебор элементов слоя
+		layerStart[i] = layerStart[i - 1] + findElement(mtrx.head, i - 1);	//массив индексов первых элементов слоёв
+		for (int k = 0; k < findElement(mtrx.head, i); k++) {		//перебор элементов слоя
 			mtrx.weights[layerStart[i] + k][layerStart[i] + k] = 0; //обнуление нейронов
-			for (int j = 0; j < mtrx.neuronsPerLayer[i - 1]; j++)	//перебор элементов предыдущего слоя
+			for (int j = 0; j < findElement(mtrx.head, i - 1); j++)	//перебор элементов предыдущего слоя
 																	/*высчитывание значения в данном нейроне*/
 				mtrx.weights[layerStart[i] + k][layerStart[i] + k] += mtrx.weights[layerStart[i - 1] + j][layerStart[i - 1] + j] * mtrx.weights[layerStart[i] + k][layerStart[i - 1] + j];
 			/*пропуск нейрона через активационную функцию*/

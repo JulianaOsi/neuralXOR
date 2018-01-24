@@ -25,7 +25,7 @@ int main() {
 		for (int i = 0; i < epochNumber; i++) {									//обучение нейронной сети
 			for (int k = 0; k < 4; k++) {										//перебор элементов выборки
 				int j = 0;
-				for (j = 0; j < XOR.neuronsPerLayer[0]; j++)					//заполнение входного слоя
+				for (j = 0; j < findElement(XOR.head,0); j++)					//заполнение входного слоя
 					XOR.weights[j][j] = trainingSet[k][j];
 				expected = trainingSet[k][j];
 				XOR.weights = training(XOR, expected);						//обучение
@@ -33,7 +33,7 @@ int main() {
 					int counter = 0;											//во время обучения
 					for (int k = 0; k < 4; k++) {								//перебор наборов из обучающей базы
 						int j = 0;
-						for (j = 0; j < XOR.neuronsPerLayer[0]; j++)			//заполнение входного слоя данными для обучения
+						for (j = 0; j < findElement(XOR.head, 0); j++)			//заполнение входного слоя данными для обучения
 							XOR.weights[j][j] = trainingSet[k][j];
 						expected = trainingSet[k][j];
 						XOR.weights = training(XOR, expected);

@@ -53,3 +53,15 @@ void printElements(node* head) {
 	}
 }
 
+int findElement(node* head, int index) {
+	node* p = head;
+	while (p->previous) {
+		p = p->previous;
+	}
+	int ind = 0;
+	while (ind != index) {
+		p = p->next;
+		ind++;
+	}
+	return p->value;
+}
