@@ -96,19 +96,19 @@ double ** training(struct neural mtrx, double expected) {
 
 /*метод обратного распростронения ошибки*/
 double **backWay(struct neural mtrx, double actual, double expected, int* layerStart) {
-	learningOptions lrnOpt;
-	lrnOpt.wDelta = wDeltaOfLastLayer(actual, expected);	//нахождение ошибки последнего слоя	
+	learningOptions options;
+	options.wDelta = wDeltaOfLastLayer(actual, expected);	//нахождение ошибки последнего слоя	
 	for (int i = layerStart[mtrx.layersNumber - 2]; i < layerStart[mtrx.layersNumber - 1]; i++) { //перебор индексов предыдущего слоя
 																								  /*перерасчёт весов, идущих к последнему слою*/
-		mtrx.weights[layerStart[mtrx.layersNumber - 1]][i] = newWeightOfLastLayer(mtrx.weights[i][i], mtrx.weights[layerStart[mtrx.layersNumber - 1]][i], lrnOpt);
+		mtrx.weights[layerStart[mtrx.layersNumber - 1]][i] = newWeightOfLastLayer(mtrx.weights[i][i], mtrx.weights[layerStart[mtrx.layersNumber - 1]][i], options);
 	}
 
 	for (int i = layerStart[mtrx.layersNumber - 2]; i < layerStart[mtrx.layersNumber - 1]; i++) { //перебор индексов предыдущего слоя
-		double error = errorOfNeuron(mtrx.weights[layerStart[mtrx.layersNumber - 1]][i], lrnOpt);	//высчитывание значения ошибки для каждого нейрона
+		double error = errorOfNeuron(mtrx.weights[layerStart[mtrx.layersNumber - 1]][i], options);	//высчитывание значения ошибки для каждого нейрона
 		for (int k = mtrx.layersNumber - 2; k > 0; k--)		//перебор слоёв сверху вниз
 			for (int m = layerStart[k]; m < layerStart[k + 1]; m++)	//перебор индексов данного слоя
 				for (int j = layerStart[k - 1]; j < layerStart[k]; j++) { //перебор индексов предыдущего слоя
-					mtrx.weights[m][j] = newWeight(mtrx.weights[m][m], mtrx.weights[m][j], error, &lrnOpt); //перерасчёт значения веса
+					mtrx.weights[m][j] = newWeight(mtrx.weights[m][m], mtrx.weights[m][j], error, &options); //перерасчёт значения веса
 				}
 	}
 	return mtrx.weights;

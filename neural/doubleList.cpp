@@ -1,52 +1,53 @@
 #include "stdafx.h"
 #include "doubleList.h"
 
-struct node* addHead() {
-	node* head = new node; //creating head node
+struct node* addHead(int value) {
+	node* head = new node;		//создание корневого узла
 
-	head->previous = NULL;	   //pointer to the tail node
-	head->next = NULL;		//pointer to the top node
-	head->value = 3;
-	return head;
+	head->previous = NULL;		//обнуление указателя на предыдущий узел
+	head->next = NULL;			//обнуление указателя на следующий узел
+	head->value = value;		//занесение значения в узел
+	return head;				//возвращение корневого узла
 }
 
-void addInTail(node* head, int data) {  //accept the values of pointer to the tail and data
+void addInTail(node* head, int data) {
 
-	node* tail = head;
-	while (tail->previous) {
+	node* tail = head;			//создание временного указателя на корень
+	while (tail->previous) {	//поиск хвостового узла
 		tail = tail->previous;
 	}
 
-	node* newElement = new node; //create new element
-	tail->previous = newElement;  //указатель хвоста на предыдущий = указатель на новый элемент
-	newElement->next = tail;	//следующий нового элемента = бывший хвост
-	/*т.е. содали двустороннюю связь м/у новым и хвостовым*/
-	newElement->previous = NULL; //указатель нового на предыдущий = null
-	newElement->value = data;
+	node* newElement = new node;//создание указателя на новый узел
+	/*создание двусторонней связи между созданным узлом и хвостовым*/
+	tail->previous = newElement;
+	newElement->next = tail;	
+	newElement->previous = NULL;//обнуление указателя на предыдущий узел
+	newElement->value = data;	//занесение значения в новый узел
 }
 
 void addInTop(node* head, int data) {
 
-	node* top = head;
-	while (top->next) {
+	node* top = head;			//создание временного указателя на корень
+	while (top->next) {			//поиск верхнего узла
 		top = top->next;
 	}
 
-	node* newElement = new node;
+	node* newElement = new node;//создание указателя на новый узел
+	/*создание двусторонней связи между созданным узлом и верхним*/
 	top->next = newElement;
 	newElement->previous = top;
 
-	newElement->next = NULL;
-	newElement->value = data;
+	newElement->next = NULL;	//обнуление указателя на следующий узел
+	newElement->value = data;	//занесение значения в новый узел
 }
 
 void printElements(node* head) {
-	node* p = head;
-	while (p->previous) {
+	node* p = head;				//создание временного указателя на корень
+	while (p->previous) {		//поиск хвостового узла
 		p = p->previous;
 	}
 
-	while (p)
+	while (p)					//печать значений всех узлов, начиная с хвостового
 	{
 		cout << p->value << endl;
 		p = p->next;
@@ -54,14 +55,14 @@ void printElements(node* head) {
 }
 
 int findElement(node* head, int index) {
-	node* p = head;
-	while (p->previous) {
+	node* p = head;				//создание временного указателя на корень
+	while (p->previous) {		//поиск хвостового узла
 		p = p->previous;
 	}
 	int ind = 0;
-	while (ind != index) {
-		p = p->next;
+	while (ind != index) {		//перебор всех узлов, начиная с хвостового
+		p = p->next;			//пока не найден узел с нужным индексом
 		ind++;
 	}
-	return p->value;
+	return p->value;			//возвращение значения в узле
 }
