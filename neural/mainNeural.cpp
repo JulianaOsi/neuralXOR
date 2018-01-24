@@ -1,39 +1,43 @@
 /*Ќейронна€ сеть дл€ решени€ логической операции XOR, еЄ создание, обучение и проверка работоспособности.*/
 
 #include "stdafx.h"
+#include "doubleList.h"
 #include "learningFunction.h"
 #include "mainNeural.h"
 #include "matrix.h"
 
 int main() {
-	neural mtrx;
-	//mtrx.neuronsPerLayer = new int[3]{ 1,3,2 };
-	//mtrx.neuronsPerLayer[0] = 0;
+	neural XOR;
+
+	XOR.head=addHead();
+	addInTail(XOR.head, 2);
+	addInTop(XOR.head, 1);
+
 	int epochNumber = 5000;
 	bool isComplete = false;
 	int trainingSet[4][3] = { { 1,0,1 },{ 1,1,0 },{ 0,1,1 },{ 0,0,0 } };
 	double expected;
-	mtrx.neuronsNumber = neuronsCounter(mtrx);									//подсчЄт количества нейронов нейросети
+	XOR.neuronsNumber = neuronsCounter(XOR);									//подсчЄт количества нейронов нейросети
 	cout << "Below will display the number of passed tests. Begin?\n";
 	system("pause");
 	while (!isComplete) {														//пока проверка не пройдена
-		mtrx.weights = matrixCreation(mtrx);									//создание матрицы весов
+		XOR.weights = matrixCreation(XOR);									//создание матрицы весов
 		for (int i = 0; i < epochNumber; i++) {									//обучение нейронной сети
 			for (int k = 0; k < 4; k++) {										//перебор элементов выборки
 				int j = 0;
-				for (j = 0; j < mtrx.neuronsPerLayer[0]; j++)					//заполнение входного сло€
-					mtrx.weights[j][j] = trainingSet[k][j];
+				for (j = 0; j < XOR.neuronsPerLayer[0]; j++)					//заполнение входного сло€
+					XOR.weights[j][j] = trainingSet[k][j];
 				expected = trainingSet[k][j];
-				mtrx.weights = training(mtrx, expected);						//обучение
+				XOR.weights = training(XOR, expected);						//обучение
 				if (i % 25 == 0) {												//проверка на работоспособность 
 					int counter = 0;											//во врем€ обучени€
 					for (int k = 0; k < 4; k++) {								//перебор наборов из обучающей базы
 						int j = 0;
-						for (j = 0; j < mtrx.neuronsPerLayer[0]; j++)			//заполнение входного сло€ данными дл€ обучени€
-							mtrx.weights[j][j] = trainingSet[k][j];
+						for (j = 0; j < XOR.neuronsPerLayer[0]; j++)			//заполнение входного сло€ данными дл€ обучени€
+							XOR.weights[j][j] = trainingSet[k][j];
 						expected = trainingSet[k][j];
-						mtrx.weights = training(mtrx, expected);
-						if (answer(mtrx.weights[5][5]) == expected)				//проверка на соответствие ожидаемого и полученного значени€
+						XOR.weights = training(XOR, expected);
+						if (answer(XOR.weights[5][5]) == expected)				//проверка на соответствие ожидаемого и полученного значени€
 							counter++;
 					}
 					cout << counter << "\t";
@@ -46,10 +50,11 @@ int main() {
 			}
 		}
 	}
-	writeToFile("weights.txt", mtrx);							//запись в файл
+	writeToFile("weights.txt", XOR);							//запись в файл
 	cout << "\nTraining completed\n";
 	for (int k = 0; k < 4; k++)													//тестирование пользователем
-		test(mtrx);
+		test(XOR);
+
 	system("pause");
 	return 0;
 }

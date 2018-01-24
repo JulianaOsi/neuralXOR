@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "matrix.h"
+#include "doubleList.h"
 #include "learningFunction.h"
+
 
 /*создание матрицы весов нейронной сети*/
 double ** matrixCreation(struct neural mtrx) {
