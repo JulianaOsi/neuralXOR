@@ -8,7 +8,7 @@
 
 int main() {
 	neural XOR;					//создание нейросети
-	XOR.head=addHead(3);		//создание корня списка
+	XOR.head = addHead(3);		//создание корня списка
 	addInTail(XOR.head, 2);		//добавление узла в хвост списка
 	addInTop(XOR.head, 1);		//добавление узла в вершину списка
 
@@ -24,7 +24,7 @@ int main() {
 		for (int i = 0; i < epochNumber; i++) {								//обучение нейронной сети
 			for (int k = 0; k < 4; k++) {									//перебор элементов выборки
 				int j = 0;
-				for (j = 0; j < findElement(XOR.head,0); j++)				//заполнение входного слоя
+				for (j = 0; j < findElement(XOR.head, 0); j++)				//заполнение входного слоя
 					XOR.weights[j][j] = trainingSet[k][j];
 				expected = trainingSet[k][j];
 				XOR.weights = training(XOR, expected);						//обучение
