@@ -36,3 +36,5 @@ double sigm(double x);
 
 /*проверка на соответствие условию, x - значение в выходном нейроне, возвращает результат нейросети */
 double answer(double x);
+
+neural readFromFile(struct neural neural, string fileName);

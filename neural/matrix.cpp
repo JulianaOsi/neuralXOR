@@ -1,70 +1,70 @@
-#include "stdafx.h"
+п»ї#include "stdafx.h"
 #include "matrix.h"
 #include "doubleList.h"
 #include "learningFunction.h"
 
 
-/*создание матрицы весов нейронной сети*/
+/*СЃРѕР·РґР°РЅРёРµ РјР°С‚СЂРёС†С‹ РІРµСЃРѕРІ РЅРµР№СЂРѕРЅРЅРѕР№ СЃРµС‚Рё*/
 double ** matrixCreation(struct neural mtrx) {
 	srand((unsigned)time(NULL));
 	int *layerStart;
 	int neuronsNumber = 0;
 	double **weights;
 	layerStart = new int[mtrx.layersNumber];
-	for (int i = 0; i < mtrx.layersNumber; i++) {		//заполняет массив индексами нейронов, 
-		layerStart[i] = neuronsNumber;					//с которых начинаются слои
+	for (int i = 0; i < mtrx.layersNumber; i++) {		//Р·Р°РїРѕР»РЅСЏРµС‚ РјР°СЃСЃРёРІ РёРЅРґРµРєСЃР°РјРё РЅРµР№СЂРѕРЅРѕРІ, 
+		layerStart[i] = neuronsNumber;					//СЃ РєРѕС‚РѕСЂС‹С… РЅР°С‡РёРЅР°СЋС‚СЃСЏ СЃР»РѕРё
 		neuronsNumber += findElement(mtrx.head, i);
 	}
 
 	weights = new double*[neuronsNumber];
-	for (int i = 0; i < neuronsNumber; i++) {			//создание нижнетреугольной матрицы
+	for (int i = 0; i < neuronsNumber; i++) {			//СЃРѕР·РґР°РЅРёРµ РЅРёР¶РЅРµС‚СЂРµСѓРіРѕР»СЊРЅРѕР№ РјР°С‚СЂРёС†С‹
 		weights[i] = new double[i + 1];
-		for (int j = 0; j < i + 1; j++)					//обнуление матрицы
+		for (int j = 0; j < i + 1; j++)					//РѕР±РЅСѓР»РµРЅРёРµ РјР°С‚СЂРёС†С‹
 			weights[i][j] = 0;
 	}
 
-	/*присваивание случайных значений весам*/
-	for (int i = 0; i < mtrx.layersNumber - 1; i++)		//перебор слоёв нейросети
-		for (int k = layerStart[i]; k < layerStart[i] + findElement(mtrx.head, i); k++)	//перебор элементов в данном слое
-			for (int j = layerStart[i + 1]; j < layerStart[i + 1] + findElement(mtrx.head, i + 1); j++)	//перебор элементов в следующем слое
-				weights[j][k] = (double)rand() / (RAND_MAX + 1) * (1 - 0) + 0; //заполнение веса между нейроном даного слоя и нейроном следующего  
+	/*РїСЂРёСЃРІР°РёРІР°РЅРёРµ СЃР»СѓС‡Р°Р№РЅС‹С… Р·РЅР°С‡РµРЅРёР№ РІРµСЃР°Рј*/
+	for (int i = 0; i < mtrx.layersNumber - 1; i++)		//РїРµСЂРµР±РѕСЂ СЃР»РѕС‘РІ РЅРµР№СЂРѕСЃРµС‚Рё
+		for (int k = layerStart[i]; k < layerStart[i] + findElement(mtrx.head, i); k++)	//РїРµСЂРµР±РѕСЂ СЌР»РµРјРµРЅС‚РѕРІ РІ РґР°РЅРЅРѕРј СЃР»РѕРµ
+			for (int j = layerStart[i + 1]; j < layerStart[i + 1] + findElement(mtrx.head, i + 1); j++)	//РїРµСЂРµР±РѕСЂ СЌР»РµРјРµРЅС‚РѕРІ РІ СЃР»РµРґСѓСЋС‰РµРј СЃР»РѕРµ
+				weights[j][k] = (double)rand() / (RAND_MAX + 1) * (1 - 0) + 0; //Р·Р°РїРѕР»РЅРµРЅРёРµ РІРµСЃР° РјРµР¶РґСѓ РЅРµР№СЂРѕРЅРѕРј РґР°РЅРѕРіРѕ СЃР»РѕСЏ Рё РЅРµР№СЂРѕРЅРѕРј СЃР»РµРґСѓСЋС‰РµРіРѕ  
 	delete[]layerStart;
 	return weights;
 }
-/*Запись матрицы в файл*/
+/*Р—Р°РїРёСЃСЊ РјР°С‚СЂРёС†С‹ РІ С„Р°Р№Р»*/
 void writeToFile(string fileName, struct neural mtrx) {
 	ofstream file(fileName);
-	for (int i = 0; i < mtrx.neuronsNumber; i++) {		//перебор строк матрицы
-		for (int j = 0; j < i + 1; j++)				//перебор элементов строки 
-			file << fixed << mtrx.weights[i][j] << "\t";	//копирование элемента в файл в фиксированном виде
+	for (int i = 0; i < mtrx.neuronsNumber; i++) {		//РїРµСЂРµР±РѕСЂ СЃС‚СЂРѕРє РјР°С‚СЂРёС†С‹
+		for (int j = 0; j < i + 1; j++)				//РїРµСЂРµР±РѕСЂ СЌР»РµРјРµРЅС‚РѕРІ СЃС‚СЂРѕРєРё 
+			file << fixed << mtrx.weights[i][j] << "\t";	//РєРѕРїРёСЂРѕРІР°РЅРёРµ СЌР»РµРјРµРЅС‚Р° РІ С„Р°Р№Р» РІ С„РёРєСЃРёСЂРѕРІР°РЅРЅРѕРј РІРёРґРµ
 		file << "\n";
 	}
 	file.close();
 
 };
 
-/*Подсчёт количества нейронов в нейронной сети*/
+/*РџРѕРґСЃС‡С‘С‚ РєРѕР»РёС‡РµСЃС‚РІР° РЅРµР№СЂРѕРЅРѕРІ РІ РЅРµР№СЂРѕРЅРЅРѕР№ СЃРµС‚Рё*/
 int neuronsCounter(struct neural mtrx) {
 	int neuronsNumber = 0;
-	for (int i = 0; i < mtrx.layersNumber; i++) {		//перебор слоёв 
-		neuronsNumber += findElement(mtrx.head, i);		//складывание нейронов каждого слоя
+	for (int i = 0; i < mtrx.layersNumber; i++) {		//РїРµСЂРµР±РѕСЂ СЃР»РѕС‘РІ 
+		neuronsNumber += findElement(mtrx.head, i);		//СЃРєР»Р°РґС‹РІР°РЅРёРµ РЅРµР№СЂРѕРЅРѕРІ РєР°Р¶РґРѕРіРѕ СЃР»РѕСЏ
 	}
 	return neuronsNumber;
 }
 
-/*определение уровня активации нейронов*/
+/*РѕРїСЂРµРґРµР»РµРЅРёРµ СѓСЂРѕРІРЅСЏ Р°РєС‚РёРІР°С†РёРё РЅРµР№СЂРѕРЅРѕРІ*/
 double ** straightPass(struct neural mtrx) {
 	int *layerStart = new int[mtrx.layersNumber];
 	layerStart[0] = 0;
-	/*определение уровней активации нейронов каждого слоя*/
-	for (int i = 1; i < mtrx.layersNumber; i++) {			//перебор слоёв 
-		layerStart[i] = layerStart[i - 1] + findElement(mtrx.head, i - 1); //массив индексов первых элементов слоёв
-		for (int k = 0; k < findElement(mtrx.head, i); k++) { //перебор элементов в слое
-			mtrx.weights[layerStart[i] + k][layerStart[i] + k] = 0; //обнуление значений нейронов
-			for (int j = 0; j < findElement(mtrx.head, i - 1); j++) //перебор элементов предыдущего слоя
-																  /*высчитывание значения в данном нейроне*/
+	/*РѕРїСЂРµРґРµР»РµРЅРёРµ СѓСЂРѕРІРЅРµР№ Р°РєС‚РёРІР°С†РёРё РЅРµР№СЂРѕРЅРѕРІ РєР°Р¶РґРѕРіРѕ СЃР»РѕСЏ*/
+	for (int i = 1; i < mtrx.layersNumber; i++) {			//РїРµСЂРµР±РѕСЂ СЃР»РѕС‘РІ 
+		layerStart[i] = layerStart[i - 1] + findElement(mtrx.head, i - 1); //РјР°СЃСЃРёРІ РёРЅРґРµРєСЃРѕРІ РїРµСЂРІС‹С… СЌР»РµРјРµРЅС‚РѕРІ СЃР»РѕС‘РІ
+		for (int k = 0; k < findElement(mtrx.head, i); k++) { //РїРµСЂРµР±РѕСЂ СЌР»РµРјРµРЅС‚РѕРІ РІ СЃР»РѕРµ
+			mtrx.weights[layerStart[i] + k][layerStart[i] + k] = 0; //РѕР±РЅСѓР»РµРЅРёРµ Р·РЅР°С‡РµРЅРёР№ РЅРµР№СЂРѕРЅРѕРІ
+			for (int j = 0; j < findElement(mtrx.head, i - 1); j++) //РїРµСЂРµР±РѕСЂ СЌР»РµРјРµРЅС‚РѕРІ РїСЂРµРґС‹РґСѓС‰РµРіРѕ СЃР»РѕСЏ
+																  /*РІС‹СЃС‡РёС‚С‹РІР°РЅРёРµ Р·РЅР°С‡РµРЅРёСЏ РІ РґР°РЅРЅРѕРј РЅРµР№СЂРѕРЅРµ*/
 				mtrx.weights[layerStart[i] + k][layerStart[i] + k] += mtrx.weights[layerStart[i - 1] + j][layerStart[i - 1] + j] * mtrx.weights[layerStart[i] + k][layerStart[i - 1] + j];
-			/*пропуск нейрона через активационную функцию*/
+			/*РїСЂРѕРїСѓСЃРє РЅРµР№СЂРѕРЅР° С‡РµСЂРµР· Р°РєС‚РёРІР°С†РёРѕРЅРЅСѓСЋ С„СѓРЅРєС†РёСЋ*/
 			mtrx.weights[layerStart[i] + k][layerStart[i] + k] = sigm(mtrx.weights[layerStart[i] + k][layerStart[i] + k]);
 		}
 	}
@@ -72,50 +72,50 @@ double ** straightPass(struct neural mtrx) {
 	return mtrx.weights;
 }
 
-/*обучение нейронной сети*/
+/*РѕР±СѓС‡РµРЅРёРµ РЅРµР№СЂРѕРЅРЅРѕР№ СЃРµС‚Рё*/
 double ** training(struct neural mtrx, double expected) {
 	int *layerStart = new int[mtrx.layersNumber];
 	layerStart[0] = 0;
-	/*определение уровней активации нейронов каждого слоя*/
-	for (int i = 1; i < mtrx.layersNumber; i++) {	//перебор слоёв
-		layerStart[i] = layerStart[i - 1] + findElement(mtrx.head, i - 1);	//массив индексов первых элементов слоёв
-		for (int k = 0; k < findElement(mtrx.head, i); k++) {		//перебор элементов слоя
-			mtrx.weights[layerStart[i] + k][layerStart[i] + k] = 0; //обнуление нейронов
-			for (int j = 0; j < findElement(mtrx.head, i - 1); j++)	//перебор элементов предыдущего слоя
-																	/*высчитывание значения в данном нейроне*/
+	/*РѕРїСЂРµРґРµР»РµРЅРёРµ СѓСЂРѕРІРЅРµР№ Р°РєС‚РёРІР°С†РёРё РЅРµР№СЂРѕРЅРѕРІ РєР°Р¶РґРѕРіРѕ СЃР»РѕСЏ*/
+	for (int i = 1; i < mtrx.layersNumber; i++) {	//РїРµСЂРµР±РѕСЂ СЃР»РѕС‘РІ
+		layerStart[i] = layerStart[i - 1] + findElement(mtrx.head, i - 1);	//РјР°СЃСЃРёРІ РёРЅРґРµРєСЃРѕРІ РїРµСЂРІС‹С… СЌР»РµРјРµРЅС‚РѕРІ СЃР»РѕС‘РІ
+		for (int k = 0; k < findElement(mtrx.head, i); k++) {		//РїРµСЂРµР±РѕСЂ СЌР»РµРјРµРЅС‚РѕРІ СЃР»РѕСЏ
+			mtrx.weights[layerStart[i] + k][layerStart[i] + k] = 0; //РѕР±РЅСѓР»РµРЅРёРµ РЅРµР№СЂРѕРЅРѕРІ
+			for (int j = 0; j < findElement(mtrx.head, i - 1); j++)	//РїРµСЂРµР±РѕСЂ СЌР»РµРјРµРЅС‚РѕРІ РїСЂРµРґС‹РґСѓС‰РµРіРѕ СЃР»РѕСЏ
+																	/*РІС‹СЃС‡РёС‚С‹РІР°РЅРёРµ Р·РЅР°С‡РµРЅРёСЏ РІ РґР°РЅРЅРѕРј РЅРµР№СЂРѕРЅРµ*/
 				mtrx.weights[layerStart[i] + k][layerStart[i] + k] += mtrx.weights[layerStart[i - 1] + j][layerStart[i - 1] + j] * mtrx.weights[layerStart[i] + k][layerStart[i - 1] + j];
-			/*пропуск нейрона через активационную функцию*/
+			/*РїСЂРѕРїСѓСЃРє РЅРµР№СЂРѕРЅР° С‡РµСЂРµР· Р°РєС‚РёРІР°С†РёРѕРЅРЅСѓСЋ С„СѓРЅРєС†РёСЋ*/
 			mtrx.weights[layerStart[i] + k][layerStart[i] + k] = sigm(mtrx.weights[layerStart[i] + k][layerStart[i] + k]);
 		}
 	}
-	/*обучение методом обратного распространения ошибки*/
+	/*РѕР±СѓС‡РµРЅРёРµ РјРµС‚РѕРґРѕРј РѕР±СЂР°С‚РЅРѕРіРѕ СЂР°СЃРїСЂРѕСЃС‚СЂР°РЅРµРЅРёСЏ РѕС€РёР±РєРё*/
 	mtrx.weights = backWay(mtrx, mtrx.weights[layerStart[mtrx.layersNumber - 1]][layerStart[mtrx.layersNumber - 1]], expected, layerStart);
 	delete[]layerStart;
 	return mtrx.weights;
 }
 
-/*метод обратного распростронения ошибки*/
+/*РјРµС‚РѕРґ РѕР±СЂР°С‚РЅРѕРіРѕ СЂР°СЃРїСЂРѕСЃС‚СЂРѕРЅРµРЅРёСЏ РѕС€РёР±РєРё*/
 double **backWay(struct neural mtrx, double actual, double expected, int* layerStart) {
 	learningOptions options;
-	options.wDelta = wDeltaOfLastLayer(actual, expected);	//нахождение ошибки последнего слоя	
-	for (int i = layerStart[mtrx.layersNumber - 2]; i < layerStart[mtrx.layersNumber - 1]; i++) { //перебор индексов предыдущего слоя
-																								  /*перерасчёт весов, идущих к последнему слою*/
+	options.wDelta = wDeltaOfLastLayer(actual, expected);	//РЅР°С…РѕР¶РґРµРЅРёРµ РѕС€РёР±РєРё РїРѕСЃР»РµРґРЅРµРіРѕ СЃР»РѕСЏ	
+	for (int i = layerStart[mtrx.layersNumber - 2]; i < layerStart[mtrx.layersNumber - 1]; i++) { //РїРµСЂРµР±РѕСЂ РёРЅРґРµРєСЃРѕРІ РїСЂРµРґС‹РґСѓС‰РµРіРѕ СЃР»РѕСЏ
+																								  /*РїРµСЂРµСЂР°СЃС‡С‘С‚ РІРµСЃРѕРІ, РёРґСѓС‰РёС… Рє РїРѕСЃР»РµРґРЅРµРјСѓ СЃР»РѕСЋ*/
 		mtrx.weights[layerStart[mtrx.layersNumber - 1]][i] = newWeightOfLastLayer(mtrx.weights[i][i], mtrx.weights[layerStart[mtrx.layersNumber - 1]][i], options);
 	}
 
-	for (int i = layerStart[mtrx.layersNumber - 2]; i < layerStart[mtrx.layersNumber - 1]; i++) { //перебор индексов предыдущего слоя
-		double error = errorOfNeuron(mtrx.weights[layerStart[mtrx.layersNumber - 1]][i], options);	//высчитывание значения ошибки для каждого нейрона
-		for (int k = mtrx.layersNumber - 2; k > 0; k--)		//перебор слоёв сверху вниз
-			for (int m = layerStart[k]; m < layerStart[k + 1]; m++)	//перебор индексов данного слоя
-				for (int j = layerStart[k - 1]; j < layerStart[k]; j++) { //перебор индексов предыдущего слоя
-					mtrx.weights[m][j] = newWeight(mtrx.weights[m][m], mtrx.weights[m][j], error, &options); //перерасчёт значения веса
+	for (int i = layerStart[mtrx.layersNumber - 2]; i < layerStart[mtrx.layersNumber - 1]; i++) { //РїРµСЂРµР±РѕСЂ РёРЅРґРµРєСЃРѕРІ РїСЂРµРґС‹РґСѓС‰РµРіРѕ СЃР»РѕСЏ
+		double error = errorOfNeuron(mtrx.weights[layerStart[mtrx.layersNumber - 1]][i], options);	//РІС‹СЃС‡РёС‚С‹РІР°РЅРёРµ Р·РЅР°С‡РµРЅРёСЏ РѕС€РёР±РєРё РґР»СЏ РєР°Р¶РґРѕРіРѕ РЅРµР№СЂРѕРЅР°
+		for (int k = mtrx.layersNumber - 2; k > 0; k--)		//РїРµСЂРµР±РѕСЂ СЃР»РѕС‘РІ СЃРІРµСЂС…Сѓ РІРЅРёР·
+			for (int m = layerStart[k]; m < layerStart[k + 1]; m++)	//РїРµСЂРµР±РѕСЂ РёРЅРґРµРєСЃРѕРІ РґР°РЅРЅРѕРіРѕ СЃР»РѕСЏ
+				for (int j = layerStart[k - 1]; j < layerStart[k]; j++) { //РїРµСЂРµР±РѕСЂ РёРЅРґРµРєСЃРѕРІ РїСЂРµРґС‹РґСѓС‰РµРіРѕ СЃР»РѕСЏ
+					mtrx.weights[m][j] = newWeight(mtrx.weights[m][m], mtrx.weights[m][j], error, &options); //РїРµСЂРµСЂР°СЃС‡С‘С‚ Р·РЅР°С‡РµРЅРёСЏ РІРµСЃР°
 				}
 	}
 	return mtrx.weights;
 
 }
 
-/*тестирование нейронной сети пользователем*/
+/*С‚РµСЃС‚РёСЂРѕРІР°РЅРёРµ РЅРµР№СЂРѕРЅРЅРѕР№ СЃРµС‚Рё РїРѕР»СЊР·РѕРІР°С‚РµР»РµРј*/
 void test(struct neural mtrx) {
 	int value1;
 	int value2;
@@ -125,20 +125,49 @@ void test(struct neural mtrx) {
 	cout << "Enter 2 input value: ";
 	cin >> value2;
 	mtrx.weights[1][1] = value2;
-	mtrx.weights = straightPass(mtrx); //пропуск входных значений через нейросеть
-	cout << "\nValue of output neuron: " << mtrx.weights[5][5]; //вывод значения нейрона выходного слоя на печать
-	cout << "\nAnswer: " << answer(mtrx.weights[5][5]) << "\n\n"; //пропуск нейрона выходного слоя через условие
+	mtrx.weights = straightPass(mtrx); //РїСЂРѕРїСѓСЃРє РІС…РѕРґРЅС‹С… Р·РЅР°С‡РµРЅРёР№ С‡РµСЂРµР· РЅРµР№СЂРѕСЃРµС‚СЊ
+	cout << "\nValue of output neuron: " << mtrx.weights[5][5]; //РІС‹РІРѕРґ Р·РЅР°С‡РµРЅРёСЏ РЅРµР№СЂРѕРЅР° РІС‹С…РѕРґРЅРѕРіРѕ СЃР»РѕСЏ РЅР° РїРµС‡Р°С‚СЊ
+	cout << "\nAnswer: " << answer(mtrx.weights[5][5]) << "\n\n"; //РїСЂРѕРїСѓСЃРє РЅРµР№СЂРѕРЅР° РІС‹С…РѕРґРЅРѕРіРѕ СЃР»РѕСЏ С‡РµСЂРµР· СѓСЃР»РѕРІРёРµ
 }
 
-/*пропуск нейрона через активационную функцию (бинарный сигмоид)*/
+/*РїСЂРѕРїСѓСЃРє РЅРµР№СЂРѕРЅР° С‡РµСЂРµР· Р°РєС‚РёРІР°С†РёРѕРЅРЅСѓСЋ С„СѓРЅРєС†РёСЋ (Р±РёРЅР°СЂРЅС‹Р№ СЃРёРіРјРѕРёРґ)*/
 double sigm(double x) {
 	double sigm = (1 / (1 + exp(-x)));
 	return sigm;
 }
 
-/*вычисление выходного значения*/
+/*РІС‹С‡РёСЃР»РµРЅРёРµ РІС‹С…РѕРґРЅРѕРіРѕ Р·РЅР°С‡РµРЅРёСЏ*/
 double answer(double x) {
-	if (x >= 0.5)				//проверка на условие активации нейрона
+	if (x >= 0.5)				//РїСЂРѕРІРµСЂРєР° РЅР° СѓСЃР»РѕРІРёРµ Р°РєС‚РёРІР°С†РёРё РЅРµР№СЂРѕРЅР°
 		return 1;
 	else return 0;
+}
+
+neural readFromFile(struct neural neural ,string fileName) {
+	setlocale(LC_ALL, "rus");
+	char buff[256];
+	ifstream fin(fileName);
+	for (int i = 0; i <= neural.neuronsNumber; i++) {
+		fin.getline(buff, 256, '\n');
+		cout << "СЃС‚СЂРѕРєР°: " << buff << endl;
+		char element[8];
+		int n = 0, m = 0, k = 0;
+		for (int j = 0; j < 256;) {
+			double value = 0;
+			for (k = j; k < j + 8; k++) {
+				element[m] = buff[k];
+				m++;
+				if (buff[k] == '\t')
+					n++;
+			}
+			j = k;
+			value = atof(element);
+			cout << value << endl;
+			neural.weights[i][n] = value;
+			if (n == i) {
+				j = 256;
+			}
+		}
+	}
+	return neural;
 }
