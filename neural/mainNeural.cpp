@@ -18,7 +18,7 @@ int main() {
 	double expected;
 	char ans;
 	XOR.neuronsNumber = neuronsCounter(XOR);								//подсчёт количества нейронов
-	cout << "Do you wanna download your matrix? Y/N";
+	cout << "Do you wanna download your matrix? Y/N" << endl;
 	cin >> ans;
 	if (ans == 'Y')
 		isAgree = true;

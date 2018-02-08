@@ -144,29 +144,25 @@ double answer(double x) {
 }
 
 neural readFromFile(struct neural neural ,string fileName) {
-	setlocale(LC_ALL, "rus");
 	char buff[256];
 	ifstream fin(fileName);
-	for (int i = 0; i <= neural.neuronsNumber; i++) {
+	for (int i = 0; i < neural.neuronsNumber; i++) {
 		fin.getline(buff, 256, '\n');
-		cout << "строка: " << buff << endl;
 		char element[8];
-		int n = 0, m = 0, k = 0;
-		for (int j = 0; j < 256;) {
+		int n = 0, k = 0;
+		for (int j = 0; j < 255;) {
 			double value = 0;
+			int m = 0;
 			for (k = j; k < j + 8; k++) {
 				element[m] = buff[k];
 				m++;
-				if (buff[k] == '\t')
-					n++;
 			}
-			j = k;
+			if (n == i)
+				j = 255;
+			else j = k + 1;
 			value = atof(element);
-			cout << value << endl;
 			neural.weights[i][n] = value;
-			if (n == i) {
-				j = 256;
-			}
+			n++;
 		}
 	}
 	return neural;
